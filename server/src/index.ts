@@ -1,25 +1,19 @@
 import express from "express";
 import cors from "cors";
-import { prisma } from "./db.js";
+import { authRouter } from "./routes/auth.js";
 
-const app = express(); // EXPRESS'S MAIN FACTORY FUNCTION IS NOW STORED IN THE APP VARIABLE 
+const app = express();
 
-app.use(cors()); // ALLOWS THE APP TO USE CORS WHICH ALLOWS THE FRONTEND TO CALL THIS SERVER
-app.use(express.json()) // ALLOWS THE SERVER TO READ JSON REQUESTS
+app.use(cors());
+app.use(express.json());
 
-app.get("/health", (req, res) => {
-  res.json({ status: "ok"});
-})
-// testing db connection
-/* app.get("/debug/tasks", async (req, res) => {
-  const tasks = await prisma.task.findMany({ include: { project: true } });
-  res.json(tasks);
-}); */
+/*app.get("/health", (req, res) => {
+  res.json({ status: "ok" });
+});*/
 
-// app.get("/health", (req, res) => {res.json({status: "ok"}); })
-// ARROW FUNCTION : () => {} so in this case : (req, res) => {res.json({status: "ok"})}
+app.use("/auth", authRouter); // every route in authRouter now starts with /auth
 
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
-})
+});
